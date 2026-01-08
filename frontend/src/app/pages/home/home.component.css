@@ -1,0 +1,269 @@
+/* Home Component - Google Photos Style */
+
+/* Override global nav styles for this component */
+.nav-link {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin-bottom: var(--spacing-xs);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  font-weight: var(--font-weight-regular);
+  width: 100%;
+  text-align: left;
+}
+
+.nav-link:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
+  font-weight: var(--font-weight-medium);
+}
+
+.nav-link:disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.nav-link i {
+  margin-right: var(--spacing-md);
+  width: 20px;
+  text-align: center;
+  color: currentColor; /* Icons inherit text color */
+}
+
+/* Media Grid Enhancements */
+.media-preview {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background-color: var(--surface-2);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.media-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.media-card:hover .media-preview img {
+  transform: scale(1.02);
+}
+
+/* Media card text */
+.media-card h6 {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.media-card small {
+  color: var(--text-secondary);
+}
+
+/* Button Overrides */
+.btn-warning {
+  background-color: var(--color-warning);
+  border-color: var(--color-warning);
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: var(--color-warning);
+  border-color: var(--color-warning);
+  opacity: 0.9;
+}
+
+.btn-outline-danger {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--color-accent-light);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+/* Search Input Styling */
+.form-control[style*="border-radius: var(--radius-pill)"] {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+.form-control[style*="border-radius: var(--radius-pill)"]:focus {
+  background-color: var(--surface-2);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.form-control[style*="border-radius: var(--radius-pill)"]::placeholder {
+  color: var(--text-muted);
+}
+
+/* Storage Widget Specific Styles - Critical Fix */
+.storage-widget {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--spacing-lg);
+  z-index: 10;
+}
+
+.storage-widget .card {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+}
+
+/* Ensure all storage widget text is readable - CRITICAL FOR VISIBILITY */
+.storage-widget small,
+.storage-widget .small {
+  color: var(--text-secondary) !important;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+}
+
+.storage-widget .text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.storage-widget .text-primary {
+  color: var(--text-primary) !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.storage-widget .text-muted {
+  color: var(--text-secondary) !important; /* Use secondary instead of muted for better visibility */
+}
+
+/* Storage progress bar */
+.storage-widget .progress {
+  background-color: var(--surface-1);
+  border-radius: var(--radius-sm);
+  height: 4px;
+}
+
+.storage-widget .progress-bar {
+  border-radius: var(--radius-sm);
+  transition: width var(--transition-normal), background-color var(--transition-normal);
+}
+
+/* Storage widget buttons */
+.storage-widget .btn-outline-light {
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+}
+
+.storage-widget .btn-outline-light:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--border-default);
+  color: var(--text-primary);
+}
+
+.storage-widget .spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Audio Player Enhancements */
+.audio-player {
+  background-color: var(--surface-2);
+  border-top: 1px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+.audio-player audio {
+  background-color: var(--surface-1);
+  border-radius: var(--radius-md);
+}
+
+/* Playing Animation */
+.playing-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.playing-indicator .bar {
+  width: 3px;
+  height: 20px;
+  background-color: var(--color-warning);
+  border-radius: 2px;
+  animation: bounce 1.4s ease-in-out infinite both;
+}
+
+.playing-indicator .bar:nth-child(1) { animation-delay: -0.32s; }
+.playing-indicator .bar:nth-child(2) { animation-delay: -0.16s; }
+.playing-indicator .bar:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scaleY(0.4); }
+  40% { transform: scaleY(1); }
+}
+
+/* Empty state text */
+.text-center .text-muted {
+  color: var(--text-muted) !important;
+}
+
+.text-center p {
+  color: var(--text-secondary);
+}
+
+/* Alert styling */
+.alert-danger {
+  background-color: var(--color-error-light);
+  border-color: var(--color-error-border);
+  color: var(--color-error-text);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .app-sidebar {
+    width: 200px;
+  }
+  
+  .media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+  
+  .app-topbar .d-flex > div:first-child {
+    width: 250px;
+  }
+}
+
+@media (max-width: 576px) {
+  .app-sidebar {
+    width: 180px;
+  }
+  
+  .media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+  }
+  
+  .app-topbar .d-flex > div:first-child {
+    width: 200px;
+  }
+  
+  .storage-widget {
+    padding: var(--spacing-md);
+  }
+}

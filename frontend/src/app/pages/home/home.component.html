@@ -1,0 +1,332 @@
+<div class="d-flex min-vh-100">
+  <!-- Left Sidebar -->
+  <div class="app-sidebar">
+    <div class="p-4">
+      <h4 class="text-primary mb-4 fw-medium">MediaCloud</h4>
+      
+      <nav class="nav flex-column">
+        <button class="nav-link" 
+           [class.active]="activeTab === 'photos'"
+           (click)="setActiveTab('photos')">
+          <i class="bi bi-image"></i> Photos
+        </button>
+        <button class="nav-link" 
+           [class.active]="activeTab === 'videos'"
+           (click)="setActiveTab('videos')">
+          <i class="bi bi-play-circle"></i> Videos
+        </button>
+        <button class="nav-link" 
+           [class.active]="activeTab === 'audio'"
+           (click)="setActiveTab('audio')">
+          <i class="bi bi-music-note"></i> Audio
+        </button>
+        <button class="nav-link text-disabled" disabled>
+          <i class="bi bi-collection"></i> Albums
+        </button>
+        
+        <hr class="my-3 border-subtle">
+        
+        <button class="nav-link" 
+           [class.active]="activeTab === 'favorites'"
+           (click)="setActiveTab('favorites')">
+          <i class="bi bi-star"></i> Favorites
+        </button>
+        <button class="nav-link" 
+           [class.active]="activeTab === 'trash'"
+           (click)="setActiveTab('trash')">
+          <i class="bi bi-trash"></i> Trash
+        </button>
+      </nav>
+    </div>
+
+    <!-- Storage Widget (Google Photos style) -->
+    <div class="storage-widget" *ngIf="storageSummary">
+      <div class="card p-3">
+        <div class="d-flex align-items-center mb-2">
+          <i class="bi bi-cloud me-2 text-secondary"></i>
+          <small class="text-secondary">{{ getPlanDisplayName() }}</small>
+        </div>
+        
+        <div class="mb-2">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <small class="text-primary">Storage</small>
+            <small class="text-muted">{{ formatBytes(storageSummary.usedBytes) }} of {{ formatBytes(storageSummary.quotaBytes) }}</small>
+          </div>
+          
+          <!-- Progress Bar -->
+          <div class="progress">
+            <div 
+              class="progress-bar" 
+              role="progressbar" 
+              [style.width.%]="getStoragePercentage()"
+              [style.background-color]="getStorageBarColor()"
+            ></div>
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center">
+          <small class="text-muted">{{ formatBytes(storageSummary.availableBytes) }} available</small>
+          <button 
+            class="btn btn-sm btn-outline-light" 
+            (click)="loadStorageSummary()"
+            [disabled]="storageLoading"
+            title="Refresh storage info"
+          >
+            <i class="bi bi-arrow-clockwise" [class.spin]="storageLoading"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Storage Loading State -->
+    <div class="storage-widget" *ngIf="!storageSummary && storageLoading">
+      <div class="card p-3 text-center">
+        <div class="spinner-border spinner-border-sm text-secondary" role="status">
+          <span class="visually-hidden">Loading storage...</span>
+        </div>
+        <small class="text-muted d-block mt-2">Loading storage...</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-grow-1">
+    <!-- Top Header -->
+    <div class="app-topbar d-flex align-items-center justify-content-between px-4">
+      <div class="d-flex align-items-center flex-grow-1">
+        <!-- Search -->
+        <div class="me-3 position-relative" style="width: 320px;">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Search media..."
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+            style="border-radius: var(--radius-pill); padding-left: 2.5rem;"
+          >
+          <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+          <button 
+            *ngIf="searchQuery.trim()" 
+            class="btn btn-sm position-absolute top-50 end-0 translate-middle-y me-2 border-0 bg-transparent text-muted"
+            (click)="clearSearch()"
+            type="button"
+          >
+            <i class="bi bi-x-circle"></i>
+          </button>
+        </div>
+        
+        <!-- Upload Button -->
+        <label class="btn btn-outline-light me-3 d-flex align-items-center" for="fileInput" [class.disabled]="uploadingFiles.size > 0">
+          <i class="bi bi-cloud-upload me-2" *ngIf="uploadingFiles.size === 0"></i>
+          <div class="spinner-border spinner-border-sm me-2" role="status" *ngIf="uploadingFiles.size > 0">
+            <span class="visually-hidden">Uploading...</span>
+          </div>
+          {{ uploadingFiles.size > 0 ? 'Uploading...' : 'Upload' }}
+        </label>
+        <input 
+          type="file" 
+          id="fileInput" 
+          class="d-none" 
+          (change)="onFileSelected($event)"
+          accept="image/*,video/*,audio/*"
+          [disabled]="uploadingFiles.size > 0"
+        >
+      </div>
+
+      <!-- Profile Menu -->
+      <div class="d-flex align-items-center">
+        <div class="dropdown">
+          <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle me-2"></i>
+            <span class="text-primary">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <button class="dropdown-item" type="button" (click)="logout()">
+                <i class="bi bi-box-arrow-right me-2"></i>
+                Logout
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="app-content">
+      <!-- Upload Error Alert -->
+      <div *ngIf="uploadError" class="alert alert-danger mx-4 mt-3" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        {{ uploadError }}
+        <button type="button" class="btn-close" (click)="uploadError = null"></button>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-secondary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Empty States -->
+      <div *ngIf="!isLoading && filteredItems.length === 0" class="text-center py-5">
+        <div *ngIf="searchQuery.trim()" class="text-muted">
+          <i class="bi bi-search mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+          <p>No results found for "{{ searchQuery }}"</p>
+          <p>Try adjusting your search terms.</p>
+        </div>
+        <div *ngIf="!searchQuery.trim()" class="text-muted">
+          <div [ngSwitch]="activeTab">
+            <div *ngSwitchCase="'photos'">
+              <i class="bi bi-image mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+              <p>No photos yet. Upload some photos to get started.</p>
+            </div>
+            <div *ngSwitchCase="'videos'">
+              <i class="bi bi-play-circle mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+              <p>No videos yet. Upload some videos to get started.</p>
+            </div>
+            <div *ngSwitchCase="'audio'">
+              <i class="bi bi-music-note mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+              <p>No audio files yet. Upload some audio to get started.</p>
+            </div>
+            <div *ngSwitchCase="'favorites'">
+              <i class="bi bi-star mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+              <p>No favorites yet. Mark some media as favorite to see them here.</p>
+            </div>
+            <div *ngSwitchCase="'trash'">
+              <i class="bi bi-trash mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+              <p>Trash is empty. Deleted items will appear here.</p>
+            </div>
+            <div *ngSwitchDefault>
+              <i class="bi bi-cloud-upload mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+              <p>No media yet. Upload to get started.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Media Grid -->
+      <div class="media-grid" *ngIf="!isLoading && filteredItems.length > 0">
+        <div *ngFor="let item of filteredItems" class="media-card">
+          <div class="media-preview">
+            <img 
+              *ngIf="item.type === 'photo'" 
+              [src]="item.blob.url" 
+              [alt]="item.title"
+            >
+            <div 
+              *ngIf="item.type === 'video'" 
+              class="d-flex align-items-center justify-content-center h-100 bg-surface-elevated"
+            >
+              <i class="bi bi-play-circle text-secondary" style="font-size: 3rem;"></i>
+            </div>
+            <div 
+              *ngIf="item.type === 'audio'" 
+              class="d-flex align-items-center justify-content-center h-100 bg-surface-elevated position-relative"
+              (click)="playAudio(item)"
+              style="cursor: pointer;"
+              [class.playing]="isCurrentlyPlaying(item)"
+            >
+              <i class="bi bi-music-note text-secondary" style="font-size: 3rem;" *ngIf="!isCurrentlyPlaying(item)"></i>
+              <div *ngIf="isCurrentlyPlaying(item)" class="text-center">
+                <i class="bi bi-play-circle-fill text-warning" style="font-size: 3rem;"></i>
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                  <div class="playing-indicator">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Media Info -->
+          <div class="p-3">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="flex-grow-1">
+                <h6 class="text-primary mb-1 fw-medium">{{ item.title }}</h6>
+                <small class="text-muted">{{ item.type | titlecase }}</small>
+              </div>
+              <div class="d-flex gap-2">
+                <button 
+                  class="btn btn-sm btn-outline-light"
+                  (click)="toggleFavorite(item)"
+                  [class.btn-warning]="item.isFavorite"
+                  [disabled]="operatingItems.has(item.id)"
+                  *ngIf="activeTab !== 'trash'"
+                >
+                  <i class="bi" [class.bi-star]="!item.isFavorite" [class.bi-star-fill]="item.isFavorite" *ngIf="!operatingItems.has(item.id)"></i>
+                  <div class="spinner-border spinner-border-sm" role="status" *ngIf="operatingItems.has(item.id)">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </button>
+                <button 
+                  class="btn btn-sm btn-outline-light"
+                  (click)="toggleTrash(item)"
+                  [disabled]="operatingItems.has(item.id)"
+                  *ngIf="activeTab !== 'trash'"
+                >
+                  <i class="bi bi-trash" *ngIf="!operatingItems.has(item.id)"></i>
+                  <div class="spinner-border spinner-border-sm" role="status" *ngIf="operatingItems.has(item.id)">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </button>
+                <button 
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="deleteMedia(item)"
+                  [disabled]="operatingItems.has(item.id)"
+                  *ngIf="activeTab === 'trash'"
+                >
+                  <i class="bi bi-trash-fill" *ngIf="!operatingItems.has(item.id)"></i>
+                  <div class="spinner-border spinner-border-sm" role="status" *ngIf="operatingItems.has(item.id)">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Audio Player (Bottom Bar) -->
+<div *ngIf="nowPlaying" class="audio-player">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-md-4">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-music-note me-3 text-primary" style="font-size: 1.5rem;"></i>
+          <div>
+            <div class="text-primary fw-medium">{{ nowPlaying.title }}</div>
+            <small class="text-secondary">Now Playing</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <audio 
+          controls 
+          class="w-100" 
+          [src]="nowPlaying.blob.url" 
+          autoplay
+          #audioPlayer
+          (ended)="stopAudio()"
+          (error)="stopAudio()"
+        >
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+      <div class="col-md-1 text-end">
+        <button 
+          class="btn btn-sm btn-outline-light" 
+          (click)="stopAudio()"
+          title="Close player"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

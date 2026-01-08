@@ -1,0 +1,12 @@
+/* Register component specific styles */
+.alert-danger {
+  background-color: var(--color-error-light);
+  border: 1px solid var(--color-error-border);
+  color: var(--color-error-text);
+  border-radius: var(--radius-md);
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}

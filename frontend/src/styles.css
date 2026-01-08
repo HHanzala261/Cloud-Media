@@ -1,0 +1,489 @@
+/* MediaCloud - Google Photos Style Theme */
+/* Design Tokens - Accessibility-First Typography */
+:root {
+  /* Colors - Neutral Dark Theme */
+  --color-background: #0f0f0f;
+  --color-surface: #1a1a1a;
+  --color-surface-elevated: #202020;
+  --color-surface-hover: #2a2a2a;
+  
+  /* Borders & Dividers */
+  --color-border: #2a2a2a;
+  --color-border-subtle: #1f1f1f;
+  --color-divider: #2a2a2a;
+  
+  /* Focus Ring */
+  --color-focus-ring: rgba(26, 115, 232, 0.4);
+  
+  /* Text Hierarchy - High Contrast for Dark Mode */
+  --text-primary: #ffffff;        /* Near-white for primary content (WCAG AAA) */
+  --text-secondary: #e8eaed;      /* High contrast for secondary content (WCAG AA+) */
+  --text-muted: #9aa0a6;          /* Readable muted text (WCAG AA) */
+  --text-disabled: #5f6368;       /* Clearly disabled but still visible */
+  --text-inverse: #202124;        /* Dark text for light surfaces */
+  --text-link: #8ab4f8;           /* Accessible link color */
+  --text-link-hover: #aecbfa;     /* Link hover state */
+  
+  /* Surface Colors */
+  --surface-1: #1a1a1a;           /* Primary surface */
+  --surface-2: #202020;           /* Elevated surface */
+  --surface-3: #2a2a2a;           /* Higher elevation */
+  
+  /* Border Colors */
+  --border-subtle: #2a2a2a;       /* Subtle borders */
+  --border-default: #3c4043;      /* Default borders */
+  
+  /* Legacy color variables for backward compatibility */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-disabled: var(--text-disabled);
+  --color-text-muted: var(--text-muted);
+  
+  /* Accent Color (Used Sparingly) */
+  --color-accent: #1a73e8;
+  --color-accent-hover: #1557b0;
+  --color-accent-light: rgba(26, 115, 232, 0.1);
+  
+  /* Status Colors */
+  --color-success: #34a853;
+  --color-warning: #fbbc04;
+  --color-error: #ea4335;
+  --color-error-light: rgba(234, 67, 53, 0.1);
+  --color-error-border: rgba(234, 67, 53, 0.3);
+  --color-error-text: #f28b82; /* Accessible red for dark mode */
+  --color-info: #4285f4;
+  
+  /* Typography */
+  --font-family-primary: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-secondary: 'Google Sans', 'Roboto', sans-serif;
+  
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 0.75rem;
+  --spacing-lg: 1rem;
+  --spacing-xl: 1.5rem;
+  --spacing-2xl: 2rem;
+  --spacing-3xl: 3rem;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 24px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  
+  /* Layout */
+  --sidebar-width: 240px;
+  --topbar-height: 64px;
+  --content-max-width: 1200px;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 350ms ease;
+}
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--text-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Bootstrap Override - Fix Dark Mode Typography */
+/* Override Bootstrap's text utilities to use our accessible tokens */
+.text-primary { 
+  color: var(--text-primary) !important; 
+}
+
+.text-secondary { 
+  color: var(--text-secondary) !important; 
+}
+
+.text-muted { 
+  color: var(--text-muted) !important; 
+}
+
+.text-dark {
+  color: var(--text-primary) !important; /* Override Bootstrap's dark text for dark theme */
+}
+
+.text-light {
+  color: var(--text-secondary) !important;
+}
+
+/* Small text and captions - ensure readability */
+small, .small {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* Links */
+a {
+  color: var(--text-link);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--text-link-hover);
+}
+
+/* Form labels - ensure high contrast */
+.form-label {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Override Bootstrap defaults to match Google Photos style */
+.btn {
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.btn-outline-light {
+  background-color: transparent;
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+}
+
+.btn-outline-light:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--border-default);
+  color: var(--text-primary);
+}
+
+.form-control {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.form-control:focus {
+  background-color: var(--surface-2);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
+  color: var(--text-primary);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+  opacity: 1; /* Ensure placeholder is visible */
+}
+
+.form-control:disabled {
+  background-color: var(--surface-1);
+  border-color: var(--border-subtle);
+  color: var(--text-disabled);
+  opacity: 0.7;
+}
+
+.card {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+}
+
+.dropdown-menu {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.dropdown-item {
+  color: var(--text-primary);
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.dropdown-item:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--text-primary);
+}
+
+/* Alert components */
+.alert {
+  border-radius: var(--radius-md);
+  border: 1px solid;
+}
+
+.alert-danger {
+  background-color: var(--color-error-light);
+  border-color: var(--color-error-border);
+  color: var(--color-error-text);
+}
+
+/* Layout Components */
+.app-topbar {
+  background-color: var(--surface-1);
+  border-bottom: 1px solid var(--border-subtle);
+  height: var(--topbar-height);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-sidebar {
+  background-color: var(--surface-1);
+  border-right: 1px solid var(--border-subtle);
+  width: var(--sidebar-width);
+  min-height: 100vh;
+  position: relative;
+}
+
+.app-content {
+  background-color: var(--color-background);
+  min-height: calc(100vh - var(--topbar-height));
+}
+
+/* Navigation */
+.nav-item {
+  margin-bottom: var(--spacing-xs);
+}
+
+.nav-link {
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  font-weight: var(--font-weight-regular);
+}
+
+.nav-link:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
+  font-weight: var(--font-weight-medium);
+}
+
+.nav-link:disabled,
+.nav-link.text-disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.nav-link i {
+  margin-right: var(--spacing-md);
+  width: 20px;
+  text-align: center;
+  color: currentColor; /* Icons inherit text color */
+}
+
+/* Media Grid */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  padding: var(--spacing-2xl);
+}
+
+.media-card {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  color: var(--text-primary);
+}
+
+.media-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.media-preview {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background-color: var(--surface-2);
+}
+
+.media-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.media-card:hover .media-preview img {
+  transform: scale(1.02);
+}
+
+/* Storage Widget - Critical Typography Fix */
+.storage-widget {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--spacing-lg);
+}
+
+.storage-widget .card {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+/* Storage widget text hierarchy - ensure all text is readable */
+.storage-widget small {
+  color: var(--text-secondary); /* High contrast for small text */
+  font-size: var(--font-size-sm);
+}
+
+.storage-widget .text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.storage-widget .text-primary {
+  color: var(--text-primary) !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.storage-widget .text-muted {
+  color: var(--text-muted) !important;
+}
+
+.progress {
+  background-color: var(--surface-1);
+  border-radius: var(--radius-sm);
+  height: 4px;
+}
+
+.progress-bar {
+  border-radius: var(--radius-sm);
+  transition: width var(--transition-normal);
+}
+
+/* Audio Player */
+.audio-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--surface-2);
+  border-top: 1px solid var(--border-default);
+  padding: var(--spacing-lg);
+  z-index: 1000;
+  color: var(--text-primary);
+}
+
+/* Utility Classes - Design Token Based */
+.text-primary { color: var(--text-primary) !important; }
+.text-secondary { color: var(--text-secondary) !important; }
+.text-muted { color: var(--text-muted) !important; }
+.text-disabled { color: var(--text-disabled) !important; }
+.text-inverse { color: var(--text-inverse) !important; }
+.text-link { color: var(--text-link) !important; }
+.text-warning { color: var(--color-warning) !important; }
+.text-success { color: var(--color-success) !important; }
+.text-error { color: var(--color-error) !important; }
+.text-info { color: var(--color-info) !important; }
+
+.bg-surface { background-color: var(--surface-1) !important; }
+.bg-surface-elevated { background-color: var(--surface-2) !important; }
+.bg-background { background-color: var(--color-background) !important; }
+
+.border-subtle { border-color: var(--border-subtle) !important; }
+.border-default { border-color: var(--border-default) !important; }
+
+/* Icon color inheritance */
+i, .bi {
+  color: currentColor;
+}
+
+/* Spinner components */
+.spinner-border {
+  color: currentColor;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Animations */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Playing indicator animation */
+.playing-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.playing-indicator .bar {
+  width: 3px;
+  height: 20px;
+  background-color: var(--color-warning);
+  border-radius: 2px;
+  animation: bounce 1.4s ease-in-out infinite both;
+}
+
+.playing-indicator .bar:nth-child(1) { animation-delay: -0.32s; }
+.playing-indicator .bar:nth-child(2) { animation-delay: -0.16s; }
+.playing-indicator .bar:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scaleY(0.4); }
+  40% { transform: scaleY(1); }
+}

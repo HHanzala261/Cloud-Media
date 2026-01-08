@@ -1,0 +1,98 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-background">
+  <div class="card p-5" style="width: 100%; max-width: 450px;">
+    <div class="text-center mb-4">
+      <h2 class="text-primary mb-3 fw-medium">Join MediaCloud</h2>
+      <p class="text-secondary">Create your account</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="firstName" class="form-label text-primary">First Name</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="firstName" 
+            name="firstName"
+            [(ngModel)]="registerData.firstName"
+            required
+            placeholder="First name"
+          >
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="lastName" class="form-label text-primary">Last Name</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="lastName" 
+            name="lastName"
+            [(ngModel)]="registerData.lastName"
+            required
+            placeholder="Last name"
+          >
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label text-primary">Email</label>
+        <input 
+          type="email" 
+          class="form-control" 
+          id="email" 
+          name="email"
+          [(ngModel)]="registerData.email"
+          required
+          email
+          placeholder="Enter your email"
+        >
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label text-primary">Password</label>
+        <input 
+          type="password" 
+          class="form-control" 
+          id="password" 
+          name="password"
+          [(ngModel)]="registerData.password"
+          required
+          minlength="6"
+          placeholder="Enter your password"
+        >
+      </div>
+
+      <div class="mb-4">
+        <label for="confirmPassword" class="form-label text-primary">Confirm Password</label>
+        <input 
+          type="password" 
+          class="form-control" 
+          id="confirmPassword" 
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          required
+          placeholder="Confirm your password"
+        >
+      </div>
+
+      <div class="alert alert-danger" *ngIf="errorMessage" role="alert">
+        {{ errorMessage }}
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn btn-primary w-100 mb-3"
+        [disabled]="isLoading || !registerForm.form.valid"
+      >
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+        {{ isLoading ? 'Creating account...' : 'Create Account' }}
+      </button>
+
+      <div class="text-center">
+        <p class="text-muted mb-0">
+          Already have an account? 
+          <a (click)="goToLogin()" class="text-decoration-none text-link" style="cursor: pointer;">Sign in</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

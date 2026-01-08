@@ -1,0 +1,57 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-background">
+  <div class="card p-5" style="width: 100%; max-width: 400px;">
+    <div class="text-center mb-4">
+      <h2 class="text-primary mb-3 fw-medium">Welcome to MediaCloud</h2>
+      <p class="text-secondary">Sign in to your account</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <div class="mb-3">
+        <label for="email" class="form-label text-primary">Email</label>
+        <input 
+          type="email" 
+          class="form-control" 
+          id="email" 
+          name="email"
+          [(ngModel)]="loginData.email"
+          required
+          email
+          placeholder="Enter your email"
+        >
+      </div>
+
+      <div class="mb-4">
+        <label for="password" class="form-label text-primary">Password</label>
+        <input 
+          type="password" 
+          class="form-control" 
+          id="password" 
+          name="password"
+          [(ngModel)]="loginData.password"
+          required
+          placeholder="Enter your password"
+        >
+      </div>
+
+      <div class="alert alert-danger" *ngIf="errorMessage" role="alert">
+        {{ errorMessage }}
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn btn-primary w-100 mb-3"
+        [disabled]="isLoading || !loginForm.form.valid"
+      >
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+        {{ isLoading ? 'Signing in...' : 'Sign In' }}
+      </button>
+
+      <div class="text-center">
+        <p class="text-muted mb-0">
+          Don't have an account? 
+          <a (click)="goToRegister()" class="text-decoration-none text-link" style="cursor: pointer;">Sign up</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
